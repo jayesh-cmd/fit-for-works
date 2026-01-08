@@ -1,20 +1,9 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
 venv/
-.env
-
-# Javascript / Node
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pdf
+*.docx
 node_modules/
-dist/
-.npm/
-
-# IDE
-.vscode/
-.idea/
 .DS_Store
-
-# Logs
-*.log
-npm-debug.log*

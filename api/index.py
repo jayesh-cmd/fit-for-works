@@ -35,7 +35,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post("/analyze")
+@app.post("/api/analyze")
 async def analyze_resume(
     file: UploadFile = File(...),
     job_category: str = Form(None),
@@ -121,7 +121,7 @@ async def analyze_resume(
 def read_root():
     return {"message": "Resume Analyzer API is running. POST to /analyze to parse a resume."}
 
-@app.post("/match")
+@app.post("/api/match")
 async def match_resume(file: UploadFile = File(...), jd: str = Form(...)):
     """
     Endpoint to upload a PDF resume AND a Job Description string.

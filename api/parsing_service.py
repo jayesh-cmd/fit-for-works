@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env'))
 
 
-if os.getenv("LLAMA_API_KEY"):
-    os.environ["LLAMA_CLOUD_API_KEY"] = os.getenv("LLAMA_API_KEY")
+if os.getenv("LLAMA_API_KEY") or os.getenv("VITE_LLAMA_API_KEY"):
+    os.environ["LLAMA_CLOUD_API_KEY"] = os.getenv("LLAMA_API_KEY") or os.getenv("VITE_LLAMA_API_KEY")
 
 def extract_resume_data(file_path):
     """

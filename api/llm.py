@@ -66,8 +66,8 @@ def analyze_career_profile(resume_text, github_projects=None, user_context=None)
     """
     Analyzes the candidate's profile using Gemini (primary) with Groq as fallback.
     """
-    gemini_key = os.getenv("GEMINI_API_KEY")
-    groq_key = os.getenv("GROQ_API_KEY")
+    gemini_key = os.getenv("GEMINI_API_KEY") or os.getenv("VITE_GEMINI_API_KEY")
+    groq_key = os.getenv("GROQ_API_KEY") or os.getenv("VITE_GROQ_API_KEY")
 
     if not gemini_key and not groq_key:
         return "⚠️  No API keys found. Please set GEMINI_API_KEY or GROQ_API_KEY in .env."
@@ -269,8 +269,8 @@ def compare_resume_to_job(resume_text, job_description):
     """
     Compares a resume against a specific job description using Gemini (primary) with Groq as fallback.
     """
-    gemini_key = os.getenv("GEMINI_API_KEY")
-    groq_key = os.getenv("GROQ_API_KEY")
+    gemini_key = os.getenv("GEMINI_API_KEY") or os.getenv("VITE_GEMINI_API_KEY")
+    groq_key = os.getenv("GROQ_API_KEY") or os.getenv("VITE_GROQ_API_KEY")
 
     if not gemini_key and not groq_key:
         return "⚠️  No API keys found."

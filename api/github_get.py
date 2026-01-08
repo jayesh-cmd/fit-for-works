@@ -9,7 +9,7 @@ import asyncio
 
 
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env'))
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN") or os.getenv("VITE_GITHUB_TOKEN")
 
 
 

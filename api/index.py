@@ -72,11 +72,16 @@ async def analyze_resume(
 
 
         try:
+            import sys
+            import os
+            # Ensure 'api' folder is in the path so we can import sibling modules
+            sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
             from parsing_service import extract_resume_data
             from llm import analyze_career_profile, extract_username_from_links
             from github_get import analyze_github_profile, match_projects, audit_repo
         except ImportError as e:
-            raise HTTPException(status_code=500, detail=f"Import Error: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Import Error: {str(e)} | CWD: {os.getcwd()} | Path: {sys.path}")
 
         resume_text, resume_urls = extract_resume_data(tmp_path)
 
@@ -161,6 +166,9 @@ async def match_resume(file: UploadFile = File(...), jd: str = Form(...)):
 
 
         if 'compare_resume_to_job' not in globals():
+             import sys
+             import os
+             sys.path.append(os.path.dirname(os.path.abspath(__file__)))
              from llm import compare_resume_to_job
 
         match_json_str = compare_resume_to_job(resume_text, jd)

@@ -1805,7 +1805,7 @@ const ResuMatcherView = ({ step, setStep, file, setFile, jd, setJd, matchResult,
       formData.append('file', file);
       formData.append('jd', jd);
 
-      const response = await fetch('http://localhost:8000/match', {
+      const response = await fetch('/api/match', {
         method: 'POST',
         body: formData,
       });

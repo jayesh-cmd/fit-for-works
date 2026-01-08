@@ -5,6 +5,14 @@
             "destination": "/api/index.py"
         },
         {
+            "source": "/templates/(.*)",
+            "destination": "/frontend/public/templates/$1"
+        },
+        {
+            "source": "/qr-code.jpeg",
+            "destination": "/frontend/public/qr-code.jpeg"
+        },
+        {
             "source": "/(.*)",
             "destination": "/frontend/index.html"
         }

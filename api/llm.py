@@ -1,8 +1,8 @@
 import os
 import re
 import json
+import requests
 from groq import Groq
-import google.generativeai as genai
 from dotenv import load_dotenv
 
 
@@ -23,11 +23,44 @@ def extract_username_from_links(links):
     Returns the first valid username found.
     """
     for link in links:
-
         match = re.search(r"github\.com/([a-zA-Z0-9-]+)(?:/|$)", link)
         if match:
             return match.group(1)
     return None
+
+def call_gemini_rest_api(prompt, api_key):
+    """
+    Calls Gemini 1.5 Flash via REST API to avoid heavy google-generativeai SDK.
+    """
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+    headers = {'Content-Type': 'application/json'}
+    payload = {
+        "contents": [{
+            "parts": [{"text": prompt}]
+        }],
+        "generationConfig": {
+            "response_mime_type": "application/json",
+            "temperature": 0
+        }
+    }
+    
+    try:
+        response = requests.post(url, headers=headers, json=payload)
+        response.raise_for_status()
+        result = response.json()
+        
+        # Extract text from response structure
+        # { "candidates": [ { "content": { "parts": [ { "text": "..." } ] } } ] }
+        if 'candidates' in result and result['candidates']:
+            candidate = result['candidates'][0]
+            if 'content' in candidate and 'parts' in candidate['content']:
+                return candidate['content']['parts'][0]['text']
+        
+        return f'{{"error": "Empty or unexpected response from Gemini API", "details": "{str(result)}"}}'
+        
+    except Exception as e:
+        print(f"   ⚠️ Gemini REST API failed: {e}")
+        raise e
 
 def analyze_career_profile(resume_text, github_projects=None, user_context=None):
     """
@@ -202,19 +235,8 @@ def analyze_career_profile(resume_text, github_projects=None, user_context=None)
 
     if gemini_key:
         try:
-            print("   🤖 Using Gemini 1.5 Flash (primary)...")
-            genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel('gemini-1.5-flash')
-
-            response = model.generate_content(
-                prompt,
-                generation_config=genai.types.GenerationConfig(
-                    temperature=0,
-                    response_mime_type="application/json"
-                )
-            )
-
-            return response.text
+            print("   🤖 Using Gemini 1.5 Flash (primary - REST)...")
+            return call_gemini_rest_api(prompt, gemini_key)
 
         except Exception as gemini_error:
             print(f"   ⚠️ Gemini failed: {gemini_error}")
@@ -302,19 +324,8 @@ def compare_resume_to_job(resume_text, job_description):
 
     if gemini_key:
         try:
-            print("   🤖 Using Gemini 1.5 Flash (primary)...")
-            genai.configure(api_key=gemini_key)
-            model = genai.GenerativeModel('gemini-1.5-flash')
-
-            response = model.generate_content(
-                prompt,
-                generation_config=genai.types.GenerationConfig(
-                    temperature=0,
-                    response_mime_type="application/json"
-                )
-            )
-
-            return response.text
+            print("   🤖 Using Gemini 1.5 Flash (primary - REST)...")
+            return call_gemini_rest_api(prompt, gemini_key)
 
         except Exception as gemini_error:
             print(f"   ⚠️ Gemini failed: {gemini_error}")

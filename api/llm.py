@@ -12,7 +12,7 @@ try:
 except ImportError:
     import sys
     sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-    from llamaparse import extract_resume_data
+    from parsing_service import extract_resume_data
     from github_get import analyze_github_profile, match_projects, audit_repo
 
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env'))

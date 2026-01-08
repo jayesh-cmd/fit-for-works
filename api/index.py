@@ -160,16 +160,29 @@ async def match_resume(file: UploadFile = File(...), jd: str = Form(...)):
 
     try:
 
+
+        try:
+            import sys
+            import os
+            # Ensure 'api' folder is in the path so we can import sibling modules
+            sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+            from parsing_service import extract_resume_data
+            from llm import compare_resume_to_job
+        except ImportError as e:
+            raise HTTPException(status_code=500, detail=f"Import Error in Match: {str(e)}")
+
         resume_text, _ = extract_resume_data(tmp_path)
 
 
 
 
-        if 'compare_resume_to_job' not in globals():
-             import sys
-             import os
-             sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-             from llm import compare_resume_to_job
+        # Lazy load already handled above
+        # if 'compare_resume_to_job' not in globals():
+        #      import sys
+        #      import os
+        #      sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+        #      from llm import compare_resume_to_job
 
         match_json_str = compare_resume_to_job(resume_text, jd)
 

@@ -1220,7 +1220,7 @@ const ReviewView = ({ step, setStep, file, setFile, analysisResult, setAnalysisR
           if (userContext.field) formData.append('job_role', userContext.field);
           if (userContext.level) formData.append('experience_level', userContext.level);
 
-          const response = await fetch('http://localhost:8000/analyze', {
+          const response = await fetch('/api/analyze', {
             method: 'POST',
             body: formData,
           });

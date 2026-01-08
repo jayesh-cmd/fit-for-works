@@ -24,7 +24,7 @@ except ImportError:
     from github_get import analyze_github_profile, match_projects, audit_repo
     from llm import analyze_career_profile, extract_username_from_links
 
-app = FastAPI(title="Resume Analyzer API")
+app = FastAPI(title="Resume Analyzer API", root_path="/api")
 
 
 app.add_middleware(

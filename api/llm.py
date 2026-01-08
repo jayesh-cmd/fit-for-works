@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 
 try:
-    from llamaparse import extract_resume_data
+    from parsing_service import extract_resume_data
     from github_get import analyze_github_profile, match_projects, audit_repo
 except ImportError:
     import sys

@@ -13,18 +13,29 @@ load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file_
 
 
 try:
-    from llamaparse import extract_resume_data
+    from parsing_service import extract_resume_data
     from github_get import analyze_github_profile, match_projects, audit_repo
     from llm import analyze_career_profile, extract_username_from_links
 except ImportError:
 
     import sys
     sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-    from llamaparse import extract_resume_data
+    from parsing_service import extract_resume_data
     from github_get import analyze_github_profile, match_projects, audit_repo
     from llm import analyze_career_profile, extract_username_from_links
 
-app = FastAPI(title="Resume Analyzer API", root_path="/api")
+app = FastAPI(title="Resume Analyzer API")
+
+from fastapi.requests import Request
+from fastapi.responses import JSONResponse
+import traceback
+
+@app.exception_handler(500)
+async def internal_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={"message": "Internal Server Error", "detail": str(exc), "traceback": traceback.format_exc()},
+    )
 
 
 app.add_middleware(

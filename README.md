@@ -28,11 +28,12 @@
 
 ```
 Solo Build/
-├── backend/
-│   ├── main.py          # API Entry point
+├── api/                 # Backend API
+│   ├── index.py         # API Entry point
 │   ├── llm.py           # AI Analysis Logic (Gemini/Groq)
 │   ├── github_get.py    # GitHub Audit Service
-│   └── llamaparse.py    # Resume PDF Parser
+│   ├── parsing_service.py # Resume PDF Parser
+│   └── requirements.txt # Backend Dependencies
 └── frontend/
     ├── src/             # React Source Code
     └── package.json     # Frontend Dependencies
@@ -45,17 +46,17 @@ Solo Build/
 Prerequisites: Python 3.9+
 
 ```bash
-cd backend
+cd api
 
 # Create virtual environment
 python3 -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 
 # Install dependencies
-pip install -r ../requirements.txt
+pip install -r requirements.txt
 
 # Run Server
-python3 main.py
+python3 index.py
 ```
 *Server runs on `http://localhost:8000`*
 
